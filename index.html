@@ -18,9 +18,8 @@
         border-radius: 10px;
         width: 80%;
         height:500px;
-        
-        
-      over-flow:scroll;
+        overflow-x:scroll;
+        max-width:90%;
         padding: 10px;
         margin: 10px;
         margin-left:100px;
@@ -33,6 +32,7 @@
         border-radius: 10px;
         border: none;
         margin-top: 10px;
+        outline:solid 1px black;
       }
 
       button {
@@ -42,21 +42,35 @@
         border: none;
         font-weight: bolder;
         font-size: 15px;
+        
       }
+      button:hover{
+background-color:black;
+color:#04f304;
+        }
       @media (max-width:480px) {
         input{
-            width:70%;
+            width:50%;
             margin-left:15px;
         }
         #output{
-            height:500px;
+            height:600px;
             margin-left:10px;
             width:90%;
-     
+            overflow-y:auto;
         }
         button{
             font-weight:bolder;
+            margin-left:10px;
+            color:white;
+            background:#38006b;
         }
+        button:hover{
+            background:#38006b;
+
+color:#ffffff;
+        }
+   
     
 
         
@@ -65,13 +79,18 @@
   </head>
   <body>
     <div id="output">
-      <div id="r"></div>
+      <div id="r">How Can i help you?</div>
     </div>
     <input type="text" id="input">
     <button onclick="generateContent()">Enter</button>
+    <button onclick="Clear()">Clear</button>
+   
 
     <script type="module">
       import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+      window.Clear = async function(){
+        document.getElementById("output").innerHTML="";
+      }
 
       window.generateContent = async function() {
         const API_KEY = 'AIzaSyDMFkSWZgh3l_FP0o6nCt4HfkJI6hgPqi8'; // Replace with your actual API key
@@ -80,26 +99,21 @@
         async function run() {
           const model = genAI.getGenerativeModel({ model: "gemini-pro" });
           const prompt = document.getElementById("input").value;
-
+          document.getElementById("output").innerHTML="";
           const result = await model.generateContent(prompt);
           const response = await result.response;
           const text = response.text();
 
           document.getElementById("input").value = "";
-          const conversationHistory = document.getElementById("r");
+          
           const userInput = document.createElement("h4");
           userInput.textContent = prompt;
-          const modelResponse = document.createElement("h4");
-          modelResponse.style.whiteSpace = "pre";
-          modelResponse.textContent = text;
-
-          conversationHistory.appendChild(userInput);
-          conversationHistory.appendChild(modelResponse);
-          document.getElementById("output").appendChild(conversationHistory);
+        document.getElementById("output").innerHTML=`<h4 style='white-space:pre;'>${text}</h4>`;
         }
 
         run();
       }
+      
     </script>
   </body>
 </html>
